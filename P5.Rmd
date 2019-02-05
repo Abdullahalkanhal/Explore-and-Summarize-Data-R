@@ -1,0 +1,279 @@
+---
+title: 'Project 5: Explore and Summarize Data'
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r echo=FALSE,warning=FALSE,message=FALSE, Load_Data}
+
+knitr::opts_chunk$set(fig.width=9,fig.height=5,fig.path='Figs/',
+                      fig.align='center',tidy=TRUE,
+                      echo=FALSE,warning=FALSE,message=FALSE)
+library(ggplot2)
+
+```
+
+**Understanding the data**
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+mydata <-  read.csv("StudentsPerformance.csv")
+str(mydata)
+```
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+head(mydata)
+```
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+## exploring categorical variables
+table(mydata$gender)
+table(mydata$race.ethnicity)
+table(mydata$parental.level.of.education)
+table(mydata$lunch)
+table(mydata$test.preparation.course)
+table(mydata$parental.level.of.education)
+```
+
+**Exploratory data analysis**
+
+*1. Students By Gender* 
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+# Histogram - Gender
+ggplot(mydata, aes(x = gender, fill = gender))+
+  geom_bar()+
+  ggtitle("Number of students by gender")+
+  theme(legend.position="none")
+```
+
+*2. Students By Race* 
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+# Histogram - Race
+ggplot(mydata, aes(x = race.ethnicity, fill = race.ethnicity)) +
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))+
+    ggtitle("Number of students by race")+
+  theme(legend.position="none")
+
+```
+
+*3. Students By Parental level of education* 
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+# Histogram - parental level of education
+ggplot(mydata, aes(x = parental.level.of.education, fill = parental.level.of.education)) +
+  geom_bar()+
+  ggtitle("Number of students by parental level of education")+
+  theme(legend.position="none")
+```
+
+**Scores by Gender**
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#BoxPlot - Average of scores by gender
+ggplot(mydata ,aes(x=as.factor(gender) , y= math.score,fill= gender))+
+geom_boxplot()+
+xlab("Gender")+
+ylab("Math Score")+
+ggtitle("Average of math scores of the students by gender")+
+  theme(legend.position="none")
+
+
+ggplot(mydata ,aes(x=as.factor(gender) , y= reading.score,fill= gender))+
+geom_boxplot()+
+xlab("Gender")+
+ylab("Reading Score")+
+ggtitle("Average of reading scores of the students by gender")+
+  theme(legend.position="none")
+
+ggplot(mydata ,aes(x=as.factor(gender) , y= writing.score,fill= gender))+
+geom_boxplot()+
+xlab("Gender")+
+ylab("Writing Score")+
+ggtitle("Average of writing scores of the students by gender")+
+  theme(legend.position="none")
+
+```
+
+
+**Scores by Race**
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#BoxPlot - Average of scores by Race
+ggplot(mydata ,aes(x=as.factor(race.ethnicity) , y= math.score, fill=race.ethnicity ))+
+geom_boxplot()+
+xlab("Race")+
+ylab("Math Score")+
+ggtitle("Average of math scores of the students by race")+
+  theme(legend.position="none")
+
+ggplot(mydata ,aes(x=as.factor(race.ethnicity) , y= reading.score , fill=race.ethnicity))+
+geom_boxplot()+
+xlab("Race")+
+ylab("Reading Score")+
+ggtitle("Average of reading scores of the students by race")+
+  theme(legend.position="none")
+
+ggplot(mydata ,aes(x=as.factor(race.ethnicity) , y= writing.score , fill=race.ethnicity))+
+geom_boxplot()+
+xlab("Race")+
+ylab("Writing Score")+
+ggtitle("Average of writing scores of the students by race")+
+  theme(legend.position="none")
+
+```
+
+
+**Scores by Parental level of education**
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+# BoxPlot - Average of scores by Parental level of education
+
+ggplot(mydata ,aes(x=as.factor(parental.level.of.education) , y= math.score, fill=parental.level.of.education ))+
+geom_boxplot()+
+xlab("Parental level of education")+
+ylab("Math Score")+
+ggtitle("Average of math scores of the students by parental level of education")+
+  theme(legend.position="none")
+
+ggplot(mydata ,aes(x=as.factor(parental.level.of.education) , y= reading.score , fill=parental.level.of.education))+
+geom_boxplot()+
+xlab("Parental level of education")+
+ylab("Reading Score")+
+ggtitle("Average of reading scores of the students by parental level of education")+
+  theme(legend.position="none")
+
+ggplot(mydata ,aes(x=as.factor(parental.level.of.education) , y= writing.score , fill=parental.level.of.education))+
+geom_boxplot()+
+xlab("Parental level of education")+
+ylab("Writing Score")+
+ggtitle("Average of writing scores of the students by parental level of education")+
+  theme(legend.position="none")
+```
+
+**Correlation between courses scores**
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+# ScatterPlot - Correlation of scores by gender
+ggplot(data=mydata, aes(x=writing.score , y=reading.score ,col= gender))+ggtitle("Correlation between reading and writing score by gender")+xlab("Writing Score")+ylab("Reading Score")+geom_point()
+
+
+ggplot(data=mydata, aes(x=writing.score , y=math.score ,col= gender))+ggtitle("Correlation between math and writing score by gender")+xlab("Writing Score")+ylab("Math Score")+geom_point()
+
+ggplot(data=mydata, aes(x=math.score , y=reading.score ,col= gender))+ggtitle("Correlation between reading and math score by gender")+xlab("Math Score")+ylab("Reading Score")+geom_point()
+```
+
+**Add columns for grade marks for each exam**
+
+
+> ">90 = A, >80 = B, >70 = C, >60 = D, >50 = E, <=50 = F"
+
+
+The code to add a column to a data frame with nested IFELSE  [Code reference](https://stackoverflow.com/questions/36919001/nested-ifelse-in-adding-a-column-to-a-data-frame)
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+
+mydata$math.grade <- ifelse(mydata$math.score>="90","A", ifelse(mydata$math.score>="80","B",ifelse(mydata$math.score>="70","C",ifelse(mydata$math.score>="60","D",ifelse(mydata$math.score>="50","E","F")))))
+
+
+mydata$writing.grade <- ifelse(mydata$writing.score>="90","A", ifelse(mydata$writing.score>="80","B",ifelse(mydata$writing.score>="70","C",ifelse(mydata$writing.score>="60","D",ifelse(mydata$writing.score>="50","E","F")))))
+
+mydata$reading.grade <- ifelse(mydata$reading.score>="90","A", ifelse(mydata$reading.score>="80","B",ifelse(mydata$reading.score>="70","C",ifelse(mydata$reading.score>="60","D",ifelse(mydata$reading.score>="50","E","F")))))
+
+```
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+head(mydata)
+```
+*Students grade By courses and gender * 
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+# Histogram - number of student by scores and gender
+ggplot(mydata, aes(x = math.grade, fill = gender))+
+  geom_bar()+
+   ggtitle("number of students By math grade and gender")
+
+ggplot(mydata, aes(x = writing.grade, fill = gender))+
+  geom_bar()+
+  ggtitle("number of students By writing grade and gender")
+
+ggplot(mydata, aes(x = reading.grade, fill = gender))+
+  geom_bar()+
+  ggtitle("number of students By reading grade and gender")
+
+```
+
+
+**Scores by Preparation course**
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+# #BoxPlot - Average of scores by Test preparation course
+ggplot(mydata ,aes(x=as.factor(test.preparation.course) , y= math.score,fill= test.preparation.course))+
+geom_boxplot()+
+xlab("Test preparation course")+
+ylab("Math Score")+
+ggtitle("Average of math scores of the students by Test preparation course")+
+  theme(legend.position="none")
+
+ggplot(mydata ,aes(x=as.factor(test.preparation.course) , y= reading.score,fill= test.preparation.course))+
+geom_boxplot()+
+xlab("Test preparation course")+
+ylab("Reading Score")+
+ggtitle("Average of reading scores of the students by Test preparation course")+
+  theme(legend.position="none")
+
+ggplot(mydata ,aes(x=as.factor(test.preparation.course) , y= writing.score,fill= test.preparation.course))+
+geom_boxplot()+
+xlab("Test preparation course")+
+ylab("Writing Score")+
+ggtitle("Average of writing scores of the students by Test preparation course")+
+  theme(legend.position="none")
+
+```
+
+##Final Plots and Summary
+
+###Plot One
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#Histogram - number of students By reading grade and gender
+ggplot(mydata, aes(x = reading.grade, fill = gender))+
+  geom_bar()+
+  ggtitle("number of students By reading grade and gender")
+
+```
+###Description One
+
+The distribution of students reading grades appears to be bimodal, Females seams having more proprtion than Males for student having grade "A" in Reading while Males are failes in reading more than Females  
+
+
+###Plot Two
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+#BoxPlot - Average of writing scores of the students by parental level of education
+ggplot(mydata ,aes(x=as.factor(parental.level.of.education) , y= writing.score , fill=parental.level.of.education))+
+geom_boxplot()+
+xlab("Parental level of education")+
+ylab("Writing Score")+
+ggtitle("Average of writing scores of the students by parental level of education")+
+  theme(legend.position="none")
+```
+
+###Description Two 
+
+Students that there parental level of education are bachelore's degree have the higher median writing score while students that there parental level of education are high school have the lower median writing score.
+
+
+##Plot Three
+
+```{r echo=FALSE,warning=FALSE,message=FALSE}
+# ScatterPlot - Correlation between math and writing score by gender
+ggplot(data=mydata, aes(x=writing.score , y=math.score ,col= gender))+ggtitle("Correlation between math and writing score by gender")+xlab("Writing Score")+ylab("Math Score")+geom_point()
+```
+
+###Description Three 
+The scatter plot shows that there is a Positive correlation between math and writing score. Also shows that Males having a better math score than Females. On the other hand Females having a better writing score than Males
+
+
+##Reflection
+The Students Performance in Exams data set contains information on almost 1000 students across 11 variables. I started by understanding the individual variables in the data set, and then I explored interesting questions and leads as I continued to make observations on plots. I explored the students scores across many variables.
+
+There was a clear trend between the Test preparation course and the average of student scores.the limitations of my model was that the data dosen't have more students grades. To investigate this data further, I would investigate students scores for each race with gender, and see which gender in which race are the student are likely have a grater score than other races.
+
+
